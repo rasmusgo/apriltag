@@ -40,10 +40,14 @@ typedef long long suseconds_t;
 
 inline int gettimeofday(struct timeval* tp, void* tzp)
 {
-  unsigned long t;
-  t = time(NULL);
-  tp->tv_sec = t / 1000;
-  tp->tv_usec = t % 1000;
+  LARGE_INTEGER counter;
+  LARGE_INTEGER freq;
+  QueryPerformanceCounter(&counter);
+  QueryPerformanceFrequency(&freq);
+  counter.QuadPart;
+  freq.QuadPart;
+  tp->tv_sec = counter.QuadPart / freq.QuadPart;
+  tp->tv_usec = counter.QuadPart % freq.QuadPart * 1000000 / freq.QuadPart;
   return 0;
 }
 #else
